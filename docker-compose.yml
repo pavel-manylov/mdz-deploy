@@ -18,6 +18,14 @@ services:
       API_BASE_PATH: http://${HOST:-localhost}:4000
     depends_on:
       - backend
+  client:
+    image: pavelmanylov/mdz_client:latest
+    ports:
+      - "4002:80"
+    environment:
+      API_BASE_PATH: http://${HOST:-localhost}:4000
+    depends_on:
+      - backend
   db:
     image: postgres:13.3
     restart: always
