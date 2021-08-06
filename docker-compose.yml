@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  backend:
+    image: pavelmanylov/mdz_backend:latest
+    depends_on:
+      - db
+    ports:
+      - "4000:3000"
+    environment:
+      RAILS_ENV: production
+    volumes:
+      - ./database.docker.yml:/app/config/database.yml
+  frontend:
+    image: pavelmanylov/mdz_frontend:latest
+    ports:
+      - "4001:80"
+    environment:
+      API_BASE_PATH: http://${HOST:-localhost}:4000
+    depends_on:
+      - backend
+  db:
+    image: postgres:13.3
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_PASSWORD: mdzpwd
+      POSTGRES_USER: mdz
+volumes:
+  db_data:
